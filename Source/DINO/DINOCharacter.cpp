@@ -51,7 +51,7 @@ ADINOCharacter::ADINOCharacter()
 	// Configure character movement
 	GetCharacterMovement()->GravityScale = 2.0f;
 	GetCharacterMovement()->AirControl = 0.80f;
-	GetCharacterMovement()->JumpZVelocity = 1000.f;
+	GetCharacterMovement()->JumpZVelocity = 850.f;
 	GetCharacterMovement()->GroundFriction = 3.0f;
 	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
 	GetCharacterMovement()->MaxFlySpeed = 600.0f;
@@ -84,6 +84,8 @@ ADINOCharacter::ADINOCharacter()
 
 	//setting the distance traveled to 0
 	DistanceTraveled = 0;
+
+	isDead = false;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -96,7 +98,7 @@ void ADINOCharacter::UpdateAnimation()
 	const float PlayerJumpVelocity = GetVelocity().Z;
 	const float PlayerSpeedSqr = PlayerVelocity.SizeSquared();
 	
-	// Are we moving or standing still?
+	// Are we moving or jumping?
 	if (isJumping == true || PlayerJumpVelocity > 0)
 	{
 		DesiredAnimation = JumpingAnimation;
@@ -104,10 +106,6 @@ void ADINOCharacter::UpdateAnimation()
 	else if(isJumping == false && PlayerSpeedSqr > 0.0f && PlayerJumpVelocity  == 0)
 	{
 		DesiredAnimation = RunningAnimation;
-	}
-	else if(PlayerJumpVelocity == 0)
-	{
-		DesiredAnimation = IdleAnimation;
 	}
 	 
 	if( GetSprite()->GetFlipbook() != DesiredAnimation 	)
@@ -119,7 +117,13 @@ void ADINOCharacter::UpdateAnimation()
 void ADINOCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	MoveRight();
+
+	//this is how we are constantly moving our character forward withouth input
+	if (isDead == false)
+	{
+		MoveRight();
+	}
+	
 	//UpdateCharacter();	
 }
 

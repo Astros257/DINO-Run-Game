@@ -44,7 +44,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
 	class UPaperFlipbook* JumpingAnimation;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
+	class UPaperFlipbook* DeathAnimation;
+
 	//The animation our characater will play during gameplay
+	UPROPERTY(BlueprintReadWrite, Category = Animations)
 	UPaperFlipbook* DesiredAnimation;
 
 	//flag to check if we are jumping or not
@@ -54,12 +58,17 @@ protected:
 	//will hold the total distance traaveled
 	UPROPERTY(BlueprintReadWrite)
 	float DistanceTraveled;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool isDead;
 	
 	/** Called to choose the correct animation to play based on the character's movement state */
 	void UpdateAnimation();
 
 	/** Called for side to side input */
 	//void MoveRight(float Value);
+
+	//called every tick to move our character forwared
 	void MoveRight();
 
 
