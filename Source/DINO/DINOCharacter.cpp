@@ -74,6 +74,13 @@ ADINOCharacter::ADINOCharacter()
 	// Enable replication on the Sprite component so animations show up when networked
 	GetSprite()->SetIsReplicated(true);
 	bReplicates = true;
+
+	//settomg the status of the characters jumping state
+	isJumping = false;
+
+	//defaulting the animation to the idleanimation
+	DesiredAnimation = IdleAnimation;
+	GetSprite()->SetFlipbook(DesiredAnimation);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -81,11 +88,25 @@ ADINOCharacter::ADINOCharacter()
 
 void ADINOCharacter::UpdateAnimation()
 {
-	const FVector PlayerVelocity = GetVelocity();
-	const float PlayerSpeedSqr = PlayerVelocity.SizeSquared();
 
+	const FVector PlayerVelocity = GetVelocity();
+	const float PlayerJumpVelocity = GetVelocity().Z;
+	const float PlayerSpeedSqr = PlayerVelocity.SizeSquared();
+	
 	// Are we moving or standing still?
-	UPaperFlipbook* DesiredAnimation = (PlayerSpeedSqr > 0.0f) ? RunningAnimation : IdleAnimation;
+	if (isJumping == true || PlayerJumpVelocity > 0)
+	{
+		DesiredAnimation = JumpingAnimation;
+	}
+	else if(isJumping == false && PlayerSpeedSqr > 0.0f && PlayerJumpVelocity  == 0)
+	{
+		DesiredAnimation = RunningAnimation;
+	}
+	else if(PlayerJumpVelocity == 0)
+	{
+		DesiredAnimation = IdleAnimation;
+	}
+	 
 	if( GetSprite()->GetFlipbook() != DesiredAnimation 	)
 	{
 		GetSprite()->SetFlipbook(DesiredAnimation);
@@ -96,7 +117,7 @@ void ADINOCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	
-	UpdateCharacter();	
+	//UpdateCharacter();	
 }
 
 
@@ -106,8 +127,8 @@ void ADINOCharacter::Tick(float DeltaSeconds)
 void ADINOCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	// Note: the 'Jump' action and the 'MoveRight' axis are bound to actual keys/buttons/sticks in DefaultInput.ini (editable from Project Settings..Input)
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ADINOCharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ADINOCharacter::StopJump);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ADINOCharacter::MoveRight);
 
 	PlayerInputComponent->BindTouch(IE_Pressed, this, &ADINOCharacter::TouchStarted);
@@ -116,10 +137,17 @@ void ADINOCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 
 void ADINOCharacter::MoveRight(float Value)
 {
-	/*UpdateChar();*/
+	UpdateCharacter();
 
 	// Apply the input to the character motion
 	AddMovementInput(FVector(1.0f, 0.0f, 0.0f), Value);
+}
+
+void ADINOCharacter::Jumping()
+{
+	isJumping = true;
+	Jump();
+	UpdateCharacter();
 }
 
 void ADINOCharacter::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location)
@@ -132,6 +160,13 @@ void ADINOCharacter::TouchStopped(const ETouchIndex::Type FingerIndex, const FVe
 {
 	// Cease jumping once touch stopped
 	StopJumping();
+}
+
+void ADINOCharacter::StopJump()
+{
+	isJumping = false;
+    StopJumping();
+	UpdateCharacter();
 }
 
 void ADINOCharacter::UpdateCharacter()

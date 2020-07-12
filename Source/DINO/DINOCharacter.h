@@ -40,11 +40,26 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
 	class UPaperFlipbook* IdleAnimation;
 
+	//The animation to play while jumping
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
+	class UPaperFlipbook* JumpingAnimation;
+
+	UPaperFlipbook* DesiredAnimation;
+
+	UPROPERTY()
+	bool isJumping;
+
 	/** Called to choose the correct animation to play based on the character's movement state */
 	void UpdateAnimation();
 
 	/** Called for side to side input */
 	void MoveRight(float Value);
+
+	// calls to set our jump status
+	void Jumping();
+
+	//calls to unset our jump status
+	void StopJump();
 
 	void UpdateCharacter();
 
