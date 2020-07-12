@@ -44,16 +44,24 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
 	class UPaperFlipbook* JumpingAnimation;
 
+	//The animation our characater will play during gameplay
 	UPaperFlipbook* DesiredAnimation;
 
-	UPROPERTY()
+	//flag to check if we are jumping or not
+	UPROPERTY(BlueprintReadWrite)
 	bool isJumping;
 
+	//will hold the total distance traaveled
+	UPROPERTY(BlueprintReadWrite)
+	float DistanceTraveled;
+	
 	/** Called to choose the correct animation to play based on the character's movement state */
 	void UpdateAnimation();
 
 	/** Called for side to side input */
-	void MoveRight(float Value);
+	//void MoveRight(float Value);
+	void MoveRight();
+
 
 	// calls to set our jump status
 	void Jumping();

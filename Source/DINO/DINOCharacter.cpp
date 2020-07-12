@@ -81,6 +81,9 @@ ADINOCharacter::ADINOCharacter()
 	//defaulting the animation to the idleanimation
 	DesiredAnimation = IdleAnimation;
 	GetSprite()->SetFlipbook(DesiredAnimation);
+
+	//setting the distance traveled to 0
+	DistanceTraveled = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -116,7 +119,7 @@ void ADINOCharacter::UpdateAnimation()
 void ADINOCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	
+	MoveRight();
 	//UpdateCharacter();	
 }
 
@@ -129,18 +132,18 @@ void ADINOCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	// Note: the 'Jump' action and the 'MoveRight' axis are bound to actual keys/buttons/sticks in DefaultInput.ini (editable from Project Settings..Input)
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ADINOCharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ADINOCharacter::StopJump);
-	PlayerInputComponent->BindAxis("MoveRight", this, &ADINOCharacter::MoveRight);
+	//PlayerInputComponent->BindAxis("MoveRight", this, &ADINOCharacter::MoveRight);
 
 	PlayerInputComponent->BindTouch(IE_Pressed, this, &ADINOCharacter::TouchStarted);
 	PlayerInputComponent->BindTouch(IE_Released, this, &ADINOCharacter::TouchStopped);
 }
 
-void ADINOCharacter::MoveRight(float Value)
+void ADINOCharacter::MoveRight()
 {
 	UpdateCharacter();
 
 	// Apply the input to the character motion
-	AddMovementInput(FVector(1.0f, 0.0f, 0.0f), Value);
+	AddMovementInput(FVector(1.0f, 0.0f, 0.0f), 1);
 }
 
 void ADINOCharacter::Jumping()
