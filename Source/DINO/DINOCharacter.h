@@ -66,10 +66,10 @@ protected:
 	void UpdateAnimation();
 
 	/** Called for side to side input */
-	//void MoveRight(float Value);
+	void MoveRight(float Value);
 
 	//called every tick to move our character forwared
-	void MoveRight();
+	//void MoveRight();
 
 
 	// calls to set our jump status

@@ -121,7 +121,7 @@ void ADINOCharacter::Tick(float DeltaSeconds)
 	//this is how we are constantly moving our character forward withouth input
 	if (isDead == false)
 	{
-		MoveRight();
+		MoveRight(DeltaSeconds);
 	}
 	
 	//UpdateCharacter();	
@@ -142,12 +142,12 @@ void ADINOCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindTouch(IE_Released, this, &ADINOCharacter::TouchStopped);
 }
 
-void ADINOCharacter::MoveRight()
+void ADINOCharacter::MoveRight(float value)
 {
 	UpdateCharacter();
 
 	// Apply the input to the character motion
-	AddMovementInput(FVector(1.0f, 0.0f, 0.0f), 1);
+	AddMovementInput(FVector(100.0f, 0.0f, 0.0f), 1);
 }
 
 void ADINOCharacter::Jumping()
