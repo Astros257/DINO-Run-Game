@@ -8,6 +8,9 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
+#include "Kismet/GameplayStatics.h"
+#include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
+#include "Sound/SoundCue.h"
 #include "Camera/CameraComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(SideScrollerCharacter, Log, All);
@@ -86,6 +89,10 @@ ADINOCharacter::ADINOCharacter()
 	DistanceTraveled = 0;
 
 	isDead = false;
+
+	static ConstructorHelpers::FObjectFinder<USoundCue> jumpcue(TEXT("'/Game/DinoSprites/Music/DinoJump.DinoJump'"));
+	JumpWave = jumpcue.Object;
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -153,6 +160,7 @@ void ADINOCharacter::MoveRight(float value)
 void ADINOCharacter::Jumping()
 {
 	isJumping = true;
+	UGameplayStatics::PlaySound2D(this, JumpWave);
 	Jump();
 	UpdateCharacter();
 }

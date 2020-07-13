@@ -71,6 +71,10 @@ protected:
 	//called every tick to move our character forwared
 	//void MoveRight();
 
+	//will hold our jump sound
+	UPROPERTY(EditDefaultsOnly, Category = "Sounds")
+	class USoundBase* JumpWave;
+
 
 	// calls to set our jump status
 	void Jumping();
