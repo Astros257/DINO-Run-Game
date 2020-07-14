@@ -88,11 +88,8 @@ ADINOCharacter::ADINOCharacter()
 	//setting the distance traveled to 0
 	DistanceTraveled = 0;
 
+	//default value of the player state 
 	isDead = false;
-
-	static ConstructorHelpers::FObjectFinder<USoundCue> jumpcue(TEXT("'/Game/DinoSprites/Music/DinoJump.DinoJump'"));
-	JumpWave = jumpcue.Object;
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -160,7 +157,6 @@ void ADINOCharacter::MoveRight(float value)
 void ADINOCharacter::Jumping()
 {
 	isJumping = true;
-	UGameplayStatics::PlaySound2D(this, JumpWave);
 	Jump();
 	UpdateCharacter();
 }
@@ -168,13 +164,17 @@ void ADINOCharacter::Jumping()
 void ADINOCharacter::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location)
 {
 	// Jump on any touch
+	isJumping = true;
 	Jump();
+	UpdateCharacter();
 }
 
 void ADINOCharacter::TouchStopped(const ETouchIndex::Type FingerIndex, const FVector Location)
 {
 	// Cease jumping once touch stopped
+	isJumping = true;
 	StopJumping();
+	UpdateCharacter();
 }
 
 void ADINOCharacter::StopJump()
